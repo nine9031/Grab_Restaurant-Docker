@@ -5,9 +5,15 @@ services:
       dockerfile: Dockerfile.server
     ports:
       - "5000:5000"
+      # จับคู่ ซ้ายเครื่องเรา ขวา docker
     volumes:
       - "./server:/app"
       - "/app/node_modules"
+      # postgresql is potocal
+      # postgres username
+      # postgres password
+      # บอก location host @db: ชื่อที่เก็บ database ไว้ที่ port 5432
+      # app_db ชื่อ database
     command: nodemon --legacy-watch index.js
     restart: always
     environment:
@@ -27,6 +33,7 @@ services:
       dockerfile: Dockerfile.client
     ports:
       - "5173:5173"
+      # จับคู่ ซ้ายเครื่องเรา ขวา docker
     volumes:
       - "./client:/app"
       - "/app/node_modules"
@@ -34,6 +41,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - server
+
   db:
     image: postgres:16
     restart: always
@@ -43,8 +51,11 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=app_db
+    # share แค่ภายใน
     volumes:
+      # ซ้าย เครื่องเรา ขวา server
+      # ถ้ามี folder ./pgdata:/var/lib/postgresql/data
       - pgdata:/var/lib/postgresql/data
-
+# share ภายนอกทุก service
 volumes:
   pgdata:

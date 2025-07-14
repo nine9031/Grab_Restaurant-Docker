@@ -1,37 +1,39 @@
-import { where } from "sequelize";
-import Restaurant from "../models/restaurant.model.js";
+const Restaurant = require("../models/restaurant.model");
+const restaurantController = {};
 
-//Create and save a new restaurant
-
-exports.create = async (req, res) => {
-    const {name, type, imageUrl} = req.body;
-    //validate data
-    if(!name || !type || !imageUrl) {
-        res
-        .status(400)
-        .send({ message: "name, type or ImageUrl can not be empty!"});
-    }
+// Create and save a new restaurant
+restaurantController.create = async (req, res) => {
+  const { name, type, imageUrl } = req.body;
+  // validate data
+  if (!name || !type || !imageUrl) {
+    res
+      .status(400)
+      .send({ message: "Name, Type or ImageUrl can not be empty!" });
     return;
-};
+  }
 
-await Restaurant.findOne({where:{ name:name}}). then((restaurant) => {
+  await Restaurant.findOne({ where: { name: name } }).then((restaurant) => {
     if (restaurant) {
-        res.status(400).send({ message : "Restaurant is already exists!"});
-        return;
+      res.status(400).send({ message: "Restaurant already exists!" });
+      return;
     }
     const newRestaurant = {
-        name: name,
-        type: type,
-        imageUrl: imageUrl,
+      name: name,
+      type: type,
+      imageUrl: imageUrl,
     };
 
-    Restaurant.create(newRestaurant).then((data) => {
+    Restaurant.create(newRestaurant)
+      .then((data) => {
         res.send(data);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         res.status(500).send({
-            message:
+          message:
             error.message || "Something error while creating the restaurant",
         });
-    });
-});
+      });
+  });
+};
+
+module.exports = restaurantController;

@@ -1,10 +1,10 @@
-import { DataTypes } from "sequelize";
-import Sequelize from "./db.js";
-const Restaurant = Sequelize.define("restaurant", {
+const { DataTypes } = require("sequelize");
+const sequelize = require("./db.js");
+const Restaurant = sequelize.define("restaurant", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoincrement: true,
+    autoIncrement: true,
   },
   name: {
     type: DataTypes.STRING,
@@ -22,10 +22,10 @@ const Restaurant = Sequelize.define("restaurant", {
 
 Restaurant.sync({ force: false })
   .then(() => {
-    console.log("Table created or already exists");
+    console.log("Table created or already existed");
   })
   .catch((error) => {
     console.log("Error creating table", error);
   });
 
-exports default Restaurant;
+module.exports = Restaurant;
